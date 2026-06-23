@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Huckleberry Way — NDIS Camping Adventures</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: #F7F4EF; color: #1A1A1A; line-height: 1.65; overflow-x: hidden; }
+:root {
+  --night: #0F1A14; --night-mid: #1C2E22; --orange: #E8722A; --orange-dark: #C85E1E;
+  --sage: #4A7C59; --sage-light: #D4E8DA; --sand: #C9A96E; --sand-light: #F2EAD8;
+  --cream: #F7F4EF; --white: #FFFFFF; --text: #2A2A2A; --text-mid: #5A5A5A;
+  --text-soft: #8A8A8A; --border: #E2DDD5;
+}
+h1,h2,h3,h4 { font-family: 'Fraunces', serif; line-height: 1.15; }
+
+/* HEADER */
+header { position: fixed; top: 0; left: 0; right: 0; z-index: 900; background: rgba(15,26,20,0.94); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,0.06); }
+.nav-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; height: 72px; }
+.logo-wrap { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.logo-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--orange), var(--sand)); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.logo-icon svg { width: 22px; height: 22px; }
+.logo-name { font-family: 'Fraunces', serif; font-size: 19px; font-weight: 700; color: white; line-height: 1.1; }
+.logo-name span { display: block; font-size: 10px; font-family: 'DM Sans', sans-serif; font-weight: 400; color: var(--sand); letter-spacing: 0.12em; text-transform: uppercase; }
+nav ul { list-style: none; display: flex; align-items: center; gap: 2px; }
+nav ul li a { display: block; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.6); text-decoration: none; padding: 8px 16px; border-radius: 6px; transition: all 0.2s; cursor: pointer; }
+nav ul li a:hover { color: white; background: rgba(255,255,255,0.08); }
+nav ul li a.active { color: white; }
+.nav-cta { background: var(--orange) !important; color: white !important; border-radius: 100px !important; }
+.nav-cta:hover { background: var(--orange-dark) !important; }
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; background: none; border: none; }
+.hamburger span { display: block; width: 22px; height: 2px; background: white; border-radius: 2px; }
+main > section { display: none; }
+main > section.active { display: block; }
+
+/* BUTTONS */
+.btn { display: inline-flex; align-items: center; gap: 8px; background: var(--orange); color: white; padding: 14px 30px; border-radius: 100px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; text-decoration: none; border: none; cursor: pointer; transition: all 0.25s; white-space: nowrap; }
+.btn:hover { background: var(--orange-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(232,114,42,0.3); }
+.btn-outline { background: transparent; color: white; border: 1.5px solid rgba(255,255,255,0.4); }
+.btn-outline:hover { background: rgba(255,255,255,0.1); border-color: white; box-shadow: none; }
+.btn-dark { background: var(--night); color: white; }
+.btn-dark:hover { background: var(--night-mid); }
+.btn-sm { padding: 10px 22px; font-size: 13px; }
+
+/* HERO */
+.hero-wrap { position: relative; min-height: 100vh; display: flex; align-items: center; overflow: hidden; background: var(--night); }
+.hero-slides { position: absolute; inset: 0; }
+.hero-slide { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: opacity 1.8s ease-in-out; }
+.hero-slide.active { opacity: 1; }
+.hero-slide::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(15,26,20,0.9) 0%, rgba(15,26,20,0.5) 60%, rgba(15,26,20,0.3) 100%); }
+.hero-content { position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: 120px 32px 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; width: 100%; }
+.hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(232,114,42,0.15); border: 1px solid rgba(232,114,42,0.3); padding: 6px 14px; border-radius: 100px; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sand); margin-bottom: 24px; }
+.hero-badge::before { content: ''; width: 6px; height: 6px; background: var(--orange); border-radius: 50%; flex-shrink: 0; }
+.hero-title { font-size: clamp(40px, 5.5vw, 66px); font-weight: 700; color: white; margin-bottom: 20px; }
+.hero-title em { font-style: italic; color: var(--sand); }
+.hero-sub { font-size: 16px; color: rgba(255,255,255,0.62); max-width: 480px; margin-bottom: 36px; line-height: 1.75; }
+.hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+.hero-right { display: flex; flex-direction: column; gap: 14px; }
+.hero-stat-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(8px); border-radius: 16px; padding: 20px 24px; display: flex; align-items: center; gap: 16px; transition: all 0.3s; }
+.hero-stat-card:hover { background: rgba(255,255,255,0.1); transform: translateX(4px); }
+.stat-icon { width: 48px; height: 48px; flex-shrink: 0; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+.stat-icon svg { width: 24px; height: 24px; }
+.stat-text strong { display: block; font-size: 22px; font-family: 'Fraunces', serif; color: white; font-weight: 700; }
+.stat-text span { font-size: 12px; color: rgba(255,255,255,0.5); font-weight: 500; }
+
+/* SLASH DIVIDERS */
+.slash-divider { position: relative; height: 72px; overflow: hidden; background: var(--cream); }
+.slash-divider::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 100%; background: var(--night); clip-path: polygon(0 0, 100% 0, 100% 35%, 0 100%); }
+.slash-divider-rev { position: relative; height: 72px; overflow: hidden; background: var(--night); }
+.slash-divider-rev::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 100%; background: var(--cream); clip-path: polygon(0 0, 100% 0, 100% 100%, 0 35%); }
+
+/* TRUST BAR */
+.trust-bar { background: var(--night-mid); border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06); }
+.trust-bar-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-around; padding: 18px 32px; flex-wrap: wrap; gap: 14px; }
+.trust-item { display: flex; align-items: center; gap: 9px; color: rgba(255,255,255,0.7); font-size: 13px; font-weight: 500; }
+.trust-item svg { width: 17px; height: 17px; color: var(--sand); flex-shrink: 0; }
+.trust-sep { width: 1px; height: 28px; background: rgba(255,255,255,0.1); }
+
+/* SECTIONS */
+.section { padding: 96px 32px; }
+.section-dark { background: var(--night); }
+.section-cream { background: var(--cream); }
+.section-sand { background: var(--sand-light); }
+.inner { max-width: 1200px; margin: 0 auto; }
+.eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--orange); margin-bottom: 12px; display: block; }
+.eyebrow-sand { color: var(--sand); }
+.section-title { font-size: clamp(30px, 4vw, 46px); font-weight: 700; color: var(--night); line-height: 1.12; }
+.section-title em { font-style: italic; color: var(--sage); }
+.title-light { color: white; }
+.title-light em { color: var(--sand); }
+.section-sub { font-size: 16px; color: var(--text-mid); margin-top: 14px; max-width: 600px; line-height: 1.75; }
+.sub-light { color: rgba(255,255,255,0.5); }
+.sec-head { margin-bottom: 52px; }
+.sec-head.center { text-align: center; }
+.sec-head.center .section-sub { margin: 14px auto 0; }
+
+/* PROGRAM CARDS */
+.programs-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+.program-card { background: white; border-radius: 20px; overflow: hidden; border: 1px solid var(--border); transition: all 0.3s; text-decoration: none; color: inherit; display: block; }
+.program-card:hover { transform: translateY(-6px); box-shadow: 0 24px 60px rgba(0,0,0,0.1); border-color: transparent; }
+.program-img { aspect-ratio: 4/3; overflow: hidden; position: relative; }
+.program-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+.program-card:hover .program-img img { transform: scale(1.06); }
+.program-tag { position: absolute; top: 14px; left: 14px; background: var(--orange); color: white; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 10px; border-radius: 100px; }
+.program-body { padding: 24px; }
+.program-body h3 { font-size: 20px; color: var(--night); margin-bottom: 8px; }
+.program-body p { font-size: 14px; color: var(--text-mid); margin-bottom: 16px; line-height: 1.65; }
+.program-meta { border-top: 1px solid var(--border); padding-top: 14px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
+.meta-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-mid); font-weight: 500; }
+.meta-row svg { width: 14px; height: 14px; color: var(--sage); flex-shrink: 0; }
+
+/* CAMPS */
+.camps-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.camp-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; transition: all 0.25s; }
+.camp-card:hover { border-color: rgba(232,114,42,0.4); background: rgba(255,255,255,0.07); }
+.camp-date { display: inline-block; background: rgba(232,114,42,0.12); color: var(--sand); font-weight: 700; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 10px; border-radius: 6px; margin-bottom: 12px; }
+.camp-card h4 { font-size: 17px; color: white; margin-bottom: 8px; }
+.camp-card p { font-size: 13px; color: rgba(255,255,255,0.45); margin-bottom: 14px; line-height: 1.6; }
+.camp-avail { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; display: inline-block; margin-bottom: 16px; }
+.avail-open { background: rgba(74,124,89,0.2); color: #6EE7B7; }
+.avail-fast { background: rgba(232,114,42,0.15); color: var(--sand); }
+
+/* TESTIMONIALS */
+.t-track-wrap { overflow: hidden; }
+.t-track { display: flex; transition: transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94); }
+.t-slide { min-width: 100%; padding: 0 16px; }
+.t-inner { max-width: 720px; margin: 0 auto; text-align: center; background: white; border-radius: 24px; padding: 48px 48px 40px; box-shadow: 0 8px 40px rgba(0,0,0,0.06); border: 1px solid var(--border); position: relative; }
+.t-avatar { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; margin: 0 auto 20px; border: 3px solid var(--sand-light); display: block; }
+.t-stars { display: flex; justify-content: center; gap: 4px; margin-bottom: 20px; }
+.t-stars svg { width: 16px; height: 16px; fill: #F5A623; }
+.t-quote { font-family: 'Fraunces', serif; font-style: italic; font-size: 20px; color: var(--night); line-height: 1.55; margin-bottom: 20px; }
+.t-qmark { position: absolute; top: 24px; left: 32px; font-family: 'Fraunces', serif; font-size: 80px; color: var(--sand-light); line-height: 1; font-style: italic; }
+.t-author { font-weight: 700; font-size: 14px; color: var(--sage); }
+.t-role { font-size: 12px; color: var(--text-soft); margin-top: 2px; }
+.t-controls { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 36px; }
+.t-btn { width: 44px; height: 44px; border-radius: 50%; background: white; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; color: var(--night); }
+.t-btn:hover { border-color: var(--orange); color: var(--orange); }
+.t-btn svg { width: 18px; height: 18px; }
+.t-dots { display: flex; gap: 6px; }
+.t-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); border: none; cursor: pointer; padding: 0; transition: all 0.3s; }
+.t-dot.active { background: var(--orange); width: 20px; border-radius: 4px; }
+
+/* FAQ */
+.faq-wrap { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
+details.faq { background: white; border-radius: 14px; border: 1px solid var(--border); overflow: hidden; }
+details.faq[open] { box-shadow: 0 8px 30px rgba(0,0,0,0.07); border-color: var(--sage-light); }
+details.faq summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; gap: 16px; font-size: 15px; font-weight: 600; color: var(--night); }
+details.faq summary::-webkit-details-marker { display: none; }
+details.faq[open] summary { color: var(--sage); }
+.faq-icon { width: 28px; height: 28px; flex-shrink: 0; border-radius: 50%; background: var(--cream); border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
+.faq-icon svg { width: 14px; height: 14px; transition: transform 0.3s; color: var(--sage); }
+details.faq[open] .faq-icon { background: var(--sage); border-color: var(--sage); }
+details.faq[open] .faq-icon svg { transform: rotate(45deg); color: white; }
+.faq-body { padding: 0 24px 20px; margin: 0; font-size: 14px; color: var(--text-mid); line-height: 1.75; border-top: 1px solid var(--border); padding-top: 16px; }
+
+/* TRUST GRID */
+.trust-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; background: var(--border); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+.trust-cell { background: white; padding: 32px 24px; text-align: center; transition: background 0.2s; }
+.trust-cell:hover { background: var(--cream); }
+.tc-icon { width: 52px; height: 52px; margin: 0 auto 14px; border-radius: 14px; background: var(--sage-light); display: flex; align-items: center; justify-content: center; }
+.tc-icon svg { width: 26px; height: 26px; color: var(--sage); }
+.trust-cell strong { display: block; font-size: 14px; font-weight: 700; color: var(--night); margin-bottom: 4px; }
+.trust-cell span { font-size: 12px; color: var(--text-soft); }
+
+/* PAGE HERO */
+.page-hero { position: relative; min-height: 50vh; display: flex; align-items: flex-end; overflow: hidden; background: var(--night); padding-top: 72px; }
+.page-hero-bg { position: absolute; inset: 0; background-size: cover; background-position: center; }
+.page-hero-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(15,26,20,0.92) 0%, rgba(15,26,20,0.35) 100%); }
+.page-hero-body { position: relative; z-index: 2; max-width: 1200px; width: 100%; margin: 0 auto; padding: 60px 32px; }
+.page-hero-body h1 { font-size: clamp(34px,5vw,58px); color: white; margin-bottom: 12px; }
+.page-hero-body p { font-size: 16px; color: rgba(255,255,255,0.58); max-width: 560px; }
+
+/* SERVICES */
+.service-block { display: grid; grid-template-columns: 1fr 1fr; border-radius: 20px; overflow: hidden; margin-bottom: 32px; border: 1px solid var(--border); box-shadow: 0 4px 24px rgba(0,0,0,0.06); }
+.service-block.flip { direction: rtl; }
+.service-block.flip > * { direction: ltr; }
+.svc-img { overflow: hidden; min-height: 340px; }
+.svc-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s; }
+.service-block:hover .svc-img img { transform: scale(1.04); }
+.svc-body { background: white; padding: 48px 44px; display: flex; flex-direction: column; justify-content: center; }
+.svc-body h3 { font-size: 28px; color: var(--night); margin-bottom: 12px; }
+.svc-body p { font-size: 15px; color: var(--text-mid); margin-bottom: 24px; line-height: 1.75; }
+.info-cards { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin-top: 48px; }
+.info-card { background: white; border-radius: 16px; padding: 28px; border: 1px solid var(--border); border-left: 4px solid var(--sage); }
+.info-card h4 { font-size: 15px; color: var(--night); margin-bottom: 8px; }
+.info-card p { font-size: 14px; color: var(--text-mid); line-height: 1.7; margin: 0; }
+
+/* ABOUT */
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+.about-imgs { position: relative; height: 520px; }
+.about-img-main { position: absolute; left: 0; top: 0; width: 78%; height: 88%; border-radius: 20px; overflow: hidden; }
+.about-img-main img { width: 100%; height: 100%; object-fit: cover; }
+.about-img-accent { position: absolute; right: 0; bottom: 0; width: 52%; height: 54%; border-radius: 20px; overflow: hidden; border: 6px solid var(--cream); box-shadow: 0 16px 48px rgba(0,0,0,0.15); }
+.about-img-accent img { width: 100%; height: 100%; object-fit: cover; }
+.about-years { position: absolute; top: 32px; right: 20px; background: var(--orange); color: white; border-radius: 16px; padding: 20px 24px; text-align: center; }
+.about-years strong { display: block; font-family: 'Fraunces', serif; font-size: 36px; font-weight: 700; }
+.about-years span { font-size: 11px; opacity: 0.85; }
+.about-content p { font-size: 15px; color: var(--text-mid); line-height: 1.8; margin-bottom: 16px; margin-top: 16px; }
+.mv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 28px 0; }
+.mv-card { background: var(--sand-light); border-radius: 14px; padding: 24px; border-left: 4px solid var(--orange); }
+.mv-card h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--orange); margin-bottom: 8px; }
+.mv-card p { font-size: 14px; color: var(--text-mid); margin: 0; line-height: 1.7; }
+.team-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 64px; }
+.team-card { background: white; border-radius: 20px; overflow: hidden; border: 1px solid var(--border); text-align: center; transition: all 0.3s; }
+.team-card:hover { transform: translateY(-5px); box-shadow: 0 16px 44px rgba(0,0,0,0.09); }
+.team-photo { aspect-ratio: 1; overflow: hidden; }
+.team-photo img { width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform 0.5s; }
+.team-card:hover .team-photo img { transform: scale(1.05); }
+.team-body { padding: 20px; }
+.team-body h4 { font-size: 17px; color: var(--night); margin-bottom: 4px; }
+.team-role { font-size: 11px; color: var(--orange); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; display: block; }
+.team-body p { font-size: 13px; color: var(--text-mid); line-height: 1.6; margin: 0; }
+
+/* CONTACT */
+.contact-grid { display: grid; grid-template-columns: 5fr 7fr; gap: 48px; align-items: start; }
+.contact-info h3 { font-size: 26px; color: var(--night); margin-bottom: 24px; }
+.c-detail { display: flex; gap: 14px; margin-bottom: 20px; align-items: flex-start; }
+.c-icon { width: 42px; height: 42px; flex-shrink: 0; border-radius: 12px; background: var(--sage-light); display: flex; align-items: center; justify-content: center; }
+.c-icon svg { width: 20px; height: 20px; color: var(--sage); }
+.c-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-soft); margin-bottom: 3px; }
+.c-value { font-size: 15px; color: var(--night); font-weight: 500; }
+.social-row { display: flex; gap: 10px; margin-top: 28px; }
+.social-btn { width: 42px; height: 42px; border-radius: 12px; background: var(--cream); border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; text-decoration: none; color: var(--text-mid); transition: all 0.2s; }
+.social-btn:hover { background: var(--night); color: white; border-color: var(--night); }
+.social-btn svg { width: 18px; height: 18px; }
+.contact-form { background: white; border-radius: 24px; padding: 40px; border: 1px solid var(--border); box-shadow: 0 8px 40px rgba(0,0,0,0.06); }
+.contact-form h3 { font-size: 22px; color: var(--night); margin-bottom: 28px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.form-group label { font-size: 11px; font-weight: 700; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.08em; }
+.form-group input, .form-group select, .form-group textarea { padding: 13px 16px; border: 1.5px solid var(--border); border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--night); background: var(--cream); outline: none; transition: border-color 0.2s; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--sage); background: white; }
+.form-group textarea { resize: vertical; min-height: 120px; }
+.map-wrap { margin-top: 56px; border-radius: 20px; overflow: hidden; border: 1px solid var(--border); }
+.map-wrap iframe { display: block; width: 100%; height: 380px; border: 0; }
+
+/* NEWSLETTER */
+.nl-band { background: var(--night-mid); padding: 64px 32px; position: relative; overflow: hidden; }
+.nl-band::before { content: ''; position: absolute; top: -80px; right: -80px; width: 320px; height: 320px; background: radial-gradient(circle, rgba(232,114,42,0.1) 0%, transparent 70%); }
+.nl-inner { max-width: 560px; margin: 0 auto; text-align: center; position: relative; z-index: 2; }
+.nl-inner h2 { font-size: 32px; color: white; margin-bottom: 10px; }
+.nl-inner p { color: rgba(255,255,255,0.5); margin-bottom: 28px; }
+.nl-form { display: flex; gap: 8px; max-width: 440px; margin: 0 auto; }
+.nl-input { flex: 1; padding: 13px 18px; border-radius: 100px; border: 1.5px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.07); color: white; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s; }
+.nl-input::placeholder { color: rgba(255,255,255,0.35); }
+.nl-input:focus { border-color: var(--orange); }
+
+/* FOOTER */
+footer { background: var(--night); }
+.footer-top { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 48px; padding: 64px 32px 48px; }
+.footer-brand p { color: rgba(255,255,255,0.4); font-size: 14px; line-height: 1.75; margin-top: 16px; margin-bottom: 24px; }
+.footer-col h5 { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.28); margin-bottom: 16px; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-col ul a { color: rgba(255,255,255,0.55); text-decoration: none; font-size: 14px; transition: color 0.2s; cursor: pointer; }
+.footer-col ul a:hover { color: var(--sand); }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,0.07); padding: 20px 32px; max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.footer-bottom p { color: rgba(255,255,255,0.28); font-size: 12px; }
+.f-social { display: flex; gap: 10px; }
+.f-social a { width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.4); text-decoration: none; transition: all 0.2s; }
+.f-social a:hover { background: var(--orange); border-color: var(--orange); color: white; }
+.f-social svg { width: 16px; height: 16px; }
+
+@media (max-width: 1024px) {
+  .programs-grid { grid-template-columns: repeat(2,1fr); }
+  .camps-grid { grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width: 860px) {
+  nav ul { display: none; }
+  .hamburger { display: flex; }
+  .hero-content { grid-template-columns: 1fr; }
+  .hero-right { display: none; }
+  .about-grid { grid-template-columns: 1fr; }
+  .about-imgs { height: 320px; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .team-grid { grid-template-columns: 1fr 1fr; }
+  .service-block, .service-block.flip { grid-template-columns: 1fr; direction: ltr; }
+  .mv-grid { grid-template-columns: 1fr; }
+  .trust-grid { grid-template-columns: repeat(2,1fr); }
+  .form-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .programs-grid, .camps-grid, .team-grid, .info-cards { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr; }
+  .trust-grid { grid-template-columns: 1fr; }
+  .nl-form { flex-direction: column; }
+  .section { padding: 64px 20px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<header id="site-header">
+  <div class="nav-inner">
+    <a href="#" class="logo-wrap nav-link-js" data-target="home">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l4-8 4 4 3-5 4 9"/><path d="M12 3C7 3 3 7 3 12"/></svg>
+      </div>
+      <div class="logo-name">Huckleberry Way <span>NDIS Camping Adventures</span></div>
+    </a>
+    <nav>
+      <ul id="main-nav">
+        <li><a data-target="home" class="nav-link-js active">Home</a></li>
+        <li><a data-target="services" class="nav-link-js">Services</a></li>
+        <li><a data-target="about" class="nav-link-js">About</a></li>
+        <li><a data-target="contact" class="nav-link-js nav-cta">Book Now</a></li>
+      </ul>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main>
+
+<!-- HOME -->
+<section id="home" class="active">
+
+  <div class="hero-wrap">
+    <div class="hero-slides">
+      <div class="hero-slide active" style="background-image:url('https://images.pexels.com/photos/1061640/pexels-photo-1061640.jpeg?auto=compress&cs=tinysrgb&w=1600')"></div>
+      <div class="hero-slide" style="background-image:url('https://images.pexels.com/photos/2662816/pexels-photo-2662816.jpeg?auto=compress&cs=tinysrgb&w=1600')"></div>
+      <div class="hero-slide" style="background-image:url('https://images.pexels.com/photos/19031778/pexels-photo-19031778.jpeg?auto=compress&cs=tinysrgb&w=1600')"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-left">
+        <div class="hero-badge">NDIS Registered Provider</div>
+        <h1 class="hero-title">Adventure is for <em>every</em> ability.</h1>
+        <p class="hero-sub">Huckleberry Way delivers inclusive, supported camping experiences across Australia — for people with disability who deserve the full wonder of the outdoors.</p>
+        <div class="hero-ctas">
+          <a href="#" class="btn nav-link-js" data-target="contact">Book Your Adventure</a>
+          <a href="#" class="btn btn-outline nav-link-js" data-target="services">Explore Programs</a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-stat-card">
+          <div class="stat-icon" style="background:rgba(74,124,89,0.2)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#4A7C59" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="stat-text"><strong>500+</strong><span>Participants supported since 2020</span></div>
+        </div>
+        <div class="hero-stat-card">
+          <div class="stat-icon" style="background:rgba(232,114,42,0.15)">
+            <svg viewBox="0 0 24 24" fill="#E8722A" stroke="#E8722A" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <div class="stat-text"><strong>4.9 / 5.0</strong><span>Average participant satisfaction</span></div>
+        </div>
+        <div class="hero-stat-card">
+          <div class="stat-icon" style="background:rgba(201,169,110,0.15)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C9A96E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <div class="stat-text"><strong>12 Locations</strong><span>Accessible camps Australia-wide</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="trust-bar">
+    <div class="trust-bar-inner">
+      <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>NDIS Registered Provider</div>
+      <div class="trust-sep"></div>
+      <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Working with Children Check</div>
+      <div class="trust-sep"></div>
+      <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Quality &amp; Safeguards Approved</div>
+      <div class="trust-sep"></div>
+      <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>First Aid Certified Staff</div>
+      <div class="trust-sep"></div>
+      <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>24/7 On-Camp Support</div>
+    </div>
+  </div>
+
+  <div class="slash-divider"></div>
+
+  <div class="section section-cream">
+    <div class="inner">
+      <div class="sec-head center">
+        <span class="eyebrow">Camping Programs</span>
+        <h2 class="section-title">Experiences built for <em>everyone</em></h2>
+        <p class="section-sub">From weekend getaways to school holiday adventures — every program is designed around your needs, your goals, and your NDIS plan.</p>
+      </div>
+      <div class="programs-grid">
+        <a href="#" class="program-card nav-link-js" data-target="services">
+          <div class="program-img">
+            <img src="https://images.pexels.com/photos/2398220/pexels-photo-2398220.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Weekend Camps"/>
+            <span class="program-tag">Most Popular</span>
+          </div>
+          <div class="program-body">
+            <h3>Weekend Camps</h3>
+            <p>A Friday-to-Sunday escape packed with accessible activities, campfires, and genuine connection in beautiful Australian settings.</p>
+            <div class="program-meta">
+              <div class="meta-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>2 nights &amp; 3 days</div>
+              <div class="meta-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>1:2 support ratio minimum</div>
+            </div>
+            <span class="btn btn-sm btn-dark">Learn More</span>
+          </div>
+        </a>
+        <a href="#" class="program-card nav-link-js" data-target="services">
+          <div class="program-img">
+            <img src="https://images.pexels.com/photos/1687845/pexels-photo-1687845.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Holiday Camps"/>
+          </div>
+          <div class="program-body">
+            <h3>School Holiday Camps</h3>
+            <p>Extended 3–5 night adventures for school-aged participants to build life skills, confidence, and lasting friendships during term breaks.</p>
+            <div class="program-meta">
+              <div class="meta-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>3–5 nights</div>
+              <div class="meta-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Ages 12–17</div>
+            </div>
+            <span class="btn btn-sm btn-dark">Learn More</span>
+          </div>
+        </a>
+        <a href="#" class="program-card nav-link-js" data-target="services">
+          <div class="program-img">
+            <img src="https://images.pexels.com/photos/775201/pexels-photo-775201.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Adult Programs"/>
+          </div>
+          <div class="program-body">
+            <h3>Adult Adventures</h3>
+            <p>For participants 18+, our adult camps focus on independence, social connection, and exploring the outdoors entirely on your terms.</p>
+            <div class="program-meta">
+              <div class="meta-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>2–4 nights</div>
+              <div class="meta-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Ages 18+</div>
+            </div>
+            <span class="btn btn-sm btn-dark">Learn More</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="section section-dark">
+    <div class="inner">
+      <div class="sec-head">
+        <span class="eyebrow eyebrow-sand">Upcoming Dates</span>
+        <h2 class="section-title title-light">Camps filling <em>fast</em></h2>
+      </div>
+      <div class="camps-grid">
+        <div class="camp-card">
+          <span class="camp-date">Nov 14–16, 2025</span>
+          <h4>Blue Mountains Weekend</h4>
+          <p>Katoomba, NSW &nbsp;·&nbsp; Ages 12–17</p>
+          <span class="camp-avail avail-open">Open</span>
+          <div><a href="#" class="btn btn-sm nav-link-js" data-target="contact">Quick Enquiry</a></div>
+        </div>
+        <div class="camp-card">
+          <span class="camp-date">Dec 5–8, 2025</span>
+          <h4>Great Ocean Road Camp</h4>
+          <p>Lorne, VIC &nbsp;·&nbsp; Ages 18+</p>
+          <span class="camp-avail avail-fast">Filling Fast</span>
+          <div><a href="#" class="btn btn-sm nav-link-js" data-target="contact">Quick Enquiry</a></div>
+        </div>
+        <div class="camp-card">
+          <span class="camp-date">Jan 10–14, 2026</span>
+          <h4>Sunshine Coast Summer</h4>
+          <p>Sunshine Coast, QLD &nbsp;·&nbsp; Ages 12–17</p>
+          <span class="camp-avail avail-fast">Filling Fast</span>
+          <div><a href="#" class="btn btn-sm nav-link-js" data-target="contact">Quick Enquiry</a></div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:36px">
+        <a href="#" class="btn btn-outline nav-link-js" data-target="services">View All Programs</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="slash-divider-rev"></div>
+
+  <div class="section section-cream">
+    <div class="inner">
+      <div class="sec-head center">
+        <span class="eyebrow">Community Stories</span>
+        <h2 class="section-title">What families are <em>saying</em></h2>
+      </div>
+      <div class="t-track-wrap">
+        <div class="t-track" id="t-track">
+          <div class="t-slide">
+            <div class="t-inner">
+              <span class="t-qmark">"</span>
+              <img class="t-avatar" src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Ben T"/>
+              <div class="t-stars"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+              <p class="t-quote">The support workers were incredible. I made so many new friends and came home wanting to go straight back.</p>
+              <p class="t-author">Ben T.</p><p class="t-role">Participant</p>
+            </div>
+          </div>
+          <div class="t-slide">
+            <div class="t-inner">
+              <span class="t-qmark">"</span>
+              <img class="t-avatar" src="https://images.pexels.com/photos/762020/pexels-photo-762020.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Sarah J"/>
+              <div class="t-stars"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+              <p class="t-quote">For the first time, my son felt truly included. He came home with so much confidence — the team treated him like he could do anything.</p>
+              <p class="t-author">Sarah J.</p><p class="t-role">Parent</p>
+            </div>
+          </div>
+          <div class="t-slide">
+            <div class="t-inner">
+              <span class="t-qmark">"</span>
+              <img class="t-avatar" src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Michael P"/>
+              <div class="t-stars"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+              <p class="t-quote">Booking was straightforward and the intake team walked us through using NDIS funding step by step. Seamless from start to finish.</p>
+              <p class="t-author">Michael P.</p><p class="t-role">Support Coordinator</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="t-controls">
+        <button class="t-btn" id="t-prev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <div class="t-dots">
+          <button class="t-dot active" data-i="0"></button>
+          <button class="t-dot" data-i="1"></button>
+          <button class="t-dot" data-i="2"></button>
+        </div>
+        <button class="t-btn" id="t-next" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section section-sand">
+    <div class="inner">
+      <div class="sec-head center">
+        <span class="eyebrow">Common Questions</span>
+        <h2 class="section-title">Everything you need to <em>know</em></h2>
+      </div>
+      <div class="faq-wrap">
+        <details class="faq"><summary>What level of support do you provide?<div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></summary><p class="faq-body">We offer a minimum 1:2 support ratio, with higher levels including 1:1 available based on individual needs assessments conducted during intake.</p></details>
+        <details class="faq"><summary>Are your camps accessible for wheelchair users?<div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></summary><p class="faq-body">Yes. We partner with accredited campsites that have fully accessible facilities, and all activities are designed to be inclusive across a range of ability levels.</p></details>
+        <details class="faq"><summary>How is NDIS funding used for camps?<div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></summary><p class="faq-body">NDIS funding typically covers support worker costs. Depending on your plan, it may also contribute to transport and activity fees. Our intake team will walk you through this.</p></details>
+        <details class="faq"><summary>What should I pack for camp?<div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></summary><p class="faq-body">Once your booking is confirmed we send a detailed packing list tailored to the specific camp location, climate, and activities planned.</p></details>
+        <details class="faq"><summary>What are the sleeping arrangements?<div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></summary><p class="faq-body">Arrangements vary by campsite and can include accessible cabins or modern spacious tents. Preferences are discussed and confirmed during the intake process.</p></details>
+        <details class="faq"><summary>Can you cater to special dietary needs?<div class="faq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></summary><p class="faq-body">Absolutely. Our camp chefs cater to all dietary requirements, allergies, and preferences — confirmed and planned before each camp begins.</p></details>
+      </div>
+    </div>
+  </div>
+
+  <div class="section section-cream">
+    <div class="inner">
+      <div class="sec-head center">
+        <span class="eyebrow">Our Credentials</span>
+        <h2 class="section-title">Safety &amp; compliance you can <em>trust</em></h2>
+      </div>
+      <div class="trust-grid">
+        <div class="trust-cell"><div class="tc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><strong>NDIS Registered</strong><span>Registered Provider</span></div>
+        <div class="trust-cell"><div class="tc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><strong>Quality Approved</strong><span>Quality &amp; Safeguards Commission</span></div>
+        <div class="trust-cell"><div class="tc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><strong>Working with Children</strong><span>All staff cleared</span></div>
+        <div class="trust-cell"><div class="tc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><strong>First Aid Certified</strong><span>CPR &amp; emergency trained</span></div>
+        <div class="trust-cell"><div class="tc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div><strong>Public Liability</strong><span>Fully insured</span></div>
+        <div class="trust-cell"><div class="tc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><strong>Experienced Guides</strong><span>Outdoor &amp; disability trained</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nl-band">
+    <div class="nl-inner">
+      <h2>Stay in the loop</h2>
+      <p>New camp dates, NDIS funding tips, and adventure stories — straight to your inbox.</p>
+      <div class="nl-form">
+        <input type="email" class="nl-input" placeholder="your@email.com"/>
+        <button class="btn">Subscribe</button>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="page-hero">
+    <div class="page-hero-bg" style="background-image:url('https://images.pexels.com/photos/775201/pexels-photo-775201.jpeg?auto=compress&cs=tinysrgb&w=1600')"></div>
+    <div class="page-hero-body">
+      <span class="eyebrow eyebrow-sand">What We Offer</span>
+      <h1>Camping programs for every need</h1>
+      <p>NDIS funded experiences across Australia — built around your goals, your support needs, and your sense of adventure.</p>
+    </div>
+  </div>
+  <div class="section section-cream">
+    <div class="inner">
+      <div class="service-block">
+        <div class="svc-img"><img src="https://images.pexels.com/photos/2398220/pexels-photo-2398220.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Weekend Camps"/></div>
+        <div class="svc-body">
+          <span class="eyebrow">Short Stays</span>
+          <h3>Weekend Camps</h3>
+          <p>Our Weekend Camps run Friday to Sunday in beautiful, accessible Australian settings. Participants enjoy campfire nights, nature walks, water activities, and meals prepared by our on-site chefs — with qualified support workers at every step.</p>
+          <a href="#" class="btn nav-link-js" data-target="contact">Book a Weekend Camp</a>
+        </div>
+      </div>
+      <div class="service-block flip">
+        <div class="svc-img"><img src="https://images.pexels.com/photos/1687845/pexels-photo-1687845.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Holiday Camps"/></div>
+        <div class="svc-body">
+          <span class="eyebrow">Extended Stays</span>
+          <h3>School Holiday Camps</h3>
+          <p>3–5 night adventures for school-aged participants during term breaks. Designed to build real life skills, expand social circles, and create memories that last — in an environment that is genuinely safe and genuinely fun.</p>
+          <a href="#" class="btn nav-link-js" data-target="contact">View Holiday Dates</a>
+        </div>
+      </div>
+      <div class="info-cards">
+        <div class="info-card"><h4>Support Levels</h4><p>We cater to a wide range of needs, from 1:3 group settings to full 1:1 individual support. Our intake team works with you to match the right ratio.</p></div>
+        <div class="info-card"><h4>Qualifications &amp; Safety</h4><p>All staff hold NDIS clearances, First Aid and CPR certifications, and relevant disability support qualifications. Safety is built into every activity.</p></div>
+        <div class="info-card"><h4>What to Bring</h4><p>After booking you'll receive a personalised packing list based on your camp's location, climate, and planned activities. We take the guesswork out of it.</p></div>
+        <div class="info-card"><h4>What We Provide</h4><p>All accommodation, meals, activity equipment, accessible transport, and 24/7 on-camp support staff are included in every program package.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section section-cream">
+    <div class="inner">
+      <div class="about-grid">
+        <div class="about-imgs">
+          <div class="about-img-main"><img src="https://images.pexels.com/photos/1061640/pexels-photo-1061640.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Outdoors camp"/></div>
+          <div class="about-img-accent"><img src="https://images.pexels.com/photos/2662816/pexels-photo-2662816.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Camp participants"/></div>
+          <div class="about-years"><strong>5+</strong><span>Years of adventures</span></div>
+        </div>
+        <div class="about-content">
+          <span class="eyebrow">Our Story</span>
+          <h2 class="section-title">Creating adventures that <em>change lives</em></h2>
+          <p>Huckleberry Way was founded on a simple belief: everyone deserves the freedom of the outdoors. Since 2020, we've supported hundreds of Australians with disability to explore, connect, and grow through the power of nature.</p>
+          <p>We work with NDIS participants, families, and support coordinators to design experiences that are genuinely safe, genuinely inclusive — and genuinely fun.</p>
+          <div class="mv-grid">
+            <div class="mv-card"><h4>Our Mission</h4><p>To create accessible and empowering outdoor adventures for NDIS participants, fostering confidence, connection, and freedom in nature.</p></div>
+            <div class="mv-card"><h4>Our Vision</h4><p>To be Australia's leading provider of inclusive outdoor experiences — making the bush, beach and wilderness available to everyone.</p></div>
+          </div>
+          <a href="#" class="btn nav-link-js" data-target="contact">Start Your Journey</a>
+        </div>
+      </div>
+
+      <div class="sec-head center" style="margin-top:80px;margin-bottom:36px">
+        <span class="eyebrow">The Team</span>
+        <h2 class="section-title">The people behind <em>the adventures</em></h2>
+      </div>
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-photo"><img src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Founder"/></div>
+          <div class="team-body"><h4>[Founder / CEO]</h4><span class="team-role">Founder &amp; Lead Guide</span><p>15 years of experience in outdoor recreation and disability support. Built Huckleberry Way from a single camp in 2020.</p></div>
+        </div>
+        <div class="team-card">
+          <div class="team-photo"><img src="https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Operations Manager"/></div>
+          <div class="team-body"><h4>[Operations Manager]</h4><span class="team-role">Operations &amp; Safety</span><p>Manages all on-ground logistics — from accessible transport to safety protocols and campsite partnerships.</p></div>
+        </div>
+        <div class="team-card">
+          <div class="team-photo"><img src="https://images.pexels.com/photos/762020/pexels-photo-762020.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Intake Coordinator"/></div>
+          <div class="team-body"><h4>[Intake Coordinator]</h4><span class="team-role">Participant Intake</span><p>The first voice you hear. Guides families through NDIS funding, bookings, and support planning with clarity and care.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="page-hero">
+    <div class="page-hero-bg" style="background-image:url('https://images.pexels.com/photos/19031778/pexels-photo-19031778.jpeg?auto=compress&cs=tinysrgb&w=1600')"></div>
+    <div class="page-hero-body">
+      <span class="eyebrow eyebrow-sand">Get in Touch</span>
+      <h1>Start your camping adventure</h1>
+      <p>Our intake team is ready to answer your questions about NDIS funding, support needs, camp dates, or anything else.</p>
+    </div>
+  </div>
+  <div class="section section-cream">
+    <div class="inner">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3>We'd love to hear from you</h3>
+          <div class="c-detail">
+            <div class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.77 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 5.99 6l.9-.89a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+            <div><p class="c-label">Phone</p><p class="c-value">1300 XXX XXX</p></div>
+          </div>
+          <div class="c-detail">
+            <div class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+            <div><p class="c-label">Email</p><p class="c-value">hello@huckleberryway.com.au</p></div>
+          </div>
+          <div class="c-detail">
+            <div class="c-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <div><p class="c-label">Hours</p><p class="c-value">Mon–Fri, 9am–5pm AEST</p></div>
+          </div>
+          <div class="social-row">
+            <a href="#" class="social-btn" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+            <a href="#" class="social-btn" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+            <a href="#" class="social-btn" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+          </div>
+        </div>
+        <div class="contact-form">
+          <h3>Send an enquiry</h3>
+          <div class="form-row">
+            <div class="form-group"><label>First Name</label><input type="text" placeholder="Jane"/></div>
+            <div class="form-group"><label>Last Name</label><input type="text" placeholder="Smith"/></div>
+          </div>
+          <div class="form-group"><label>Email Address</label><input type="email" placeholder="jane@email.com"/></div>
+          <div class="form-group"><label>Phone Number</label><input type="tel" placeholder="04XX XXX XXX"/></div>
+          <div class="form-group"><label>I am a</label>
+            <select><option>NDIS Participant</option><option>Parent / Guardian</option><option>Support Coordinator</option><option>Plan Manager</option><option>Other</option></select>
+          </div>
+          <div class="form-group"><label>Message</label><textarea placeholder="Tell us about your needs, goals, or questions..."></textarea></div>
+          <button type="submit" class="btn" style="width:100%;justify-content:center">Send Enquiry</button>
+        </div>
+      </div>
+      <div class="map-wrap">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3312.334469752011!2d151.2067833152109!3d-33.8804702806527!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b12ae222d07525b%3A0x42c1613d11b3086b!2sSydney%20NSW!5e0!3m2!1sen!2sau!4v1664426426431!5m2!1sen!2sau" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="logo-wrap">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l4-8 4 4 3-5 4 9"/><path d="M12 3C7 3 3 7 3 12"/></svg></div>
+        <div class="logo-name">Huckleberry Way <span>NDIS Camping Adventures</span></div>
+      </div>
+      <p>Creating accessible camping adventures that build confidence, independence, and lasting friendships for Australians with disability.</p>
+      <div class="f-social">
+        <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+        <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Explore</h5>
+      <ul>
+        <li><a class="nav-link-js" data-target="home">Home</a></li>
+        <li><a class="nav-link-js" data-target="services">Services</a></li>
+        <li><a class="nav-link-js" data-target="about">About Us</a></li>
+        <li><a class="nav-link-js" data-target="contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Programs</h5>
+      <ul>
+        <li><a href="#">Weekend Camps</a></li>
+        <li><a href="#">Holiday Camps</a></li>
+        <li><a href="#">Adult Adventures</a></li>
+        <li><a href="#">Upcoming Dates</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="tel:1300000000">1300 XXX XXX</a></li>
+        <li><a href="mailto:hello@huckleberryway.com.au">hello@huckleberryway.com.au</a></li>
+        <li><a href="#">Mon–Fri, 9am–5pm AEST</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Huckleberry Way. All Rights Reserved.</p>
+    <p>NDIS Registered Provider &nbsp;·&nbsp; ABN XX XXX XXX XXX</p>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const allLinks = document.querySelectorAll('.nav-link-js');
+  const sections = document.querySelectorAll('main > section');
+  const mainLinks = document.querySelectorAll('#main-nav a');
+
+  function showSection(id) {
+    sections.forEach(s => s.classList.remove('active'));
+    const t = document.getElementById(id) || document.getElementById('home');
+    t.classList.add('active');
+    mainLinks.forEach(a => a.classList.toggle('active', a.getAttribute('data-target') === id));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  allLinks.forEach(l => l.addEventListener('click', function(e) {
+    e.preventDefault();
+    const t = this.getAttribute('data-target');
+    if (t) showSection(t);
+  }));
+  showSection('home');
+
+  window.addEventListener('scroll', () => {
+    document.getElementById('site-header').style.background =
+      window.scrollY > 20 ? 'rgba(15,26,20,0.98)' : 'rgba(15,26,20,0.94)';
+  });
+
+  document.getElementById('hamburger').addEventListener('click', function() {
+    const nav = document.getElementById('main-nav');
+    const open = nav.style.display === 'flex';
+    Object.assign(nav.style, open ? { display: 'none' } : {
+      display: 'flex', flexDirection: 'column', position: 'absolute',
+      top: '72px', left: '0', right: '0', background: '#0F1A14',
+      padding: '16px 24px 24px', gap: '4px',
+      borderBottom: '1px solid rgba(255,255,255,0.08)'
+    });
+  });
+
+  const slides = document.querySelectorAll('.hero-slide');
+  let hi = 0;
+  if (slides.length > 1) setInterval(() => {
+    slides[hi].classList.remove('active');
+    hi = (hi + 1) % slides.length;
+    slides[hi].classList.add('active');
+  }, 5000);
+
+  const track = document.getElementById('t-track');
+  const dots = document.querySelectorAll('.t-dot');
+  let ti = 0, timer;
+  function goTo(n) {
+    ti = ((n % 3) + 3) % 3;
+    track.style.transform = `translateX(-${ti * 100}%)`;
+    dots.forEach((d, i) => d.classList.toggle('active', i === ti));
+  }
+  function startAuto() { stopAuto(); timer = setInterval(() => goTo(ti + 1), 4500); }
+  function stopAuto() { clearInterval(timer); }
+  document.getElementById('t-prev').addEventListener('click', () => { stopAuto(); goTo(ti - 1); startAuto(); });
+  document.getElementById('t-next').addEventListener('click', () => { stopAuto(); goTo(ti + 1); startAuto(); });
+  dots.forEach(d => d.addEventListener('click', () => { stopAuto(); goTo(+d.getAttribute('data-i')); startAuto(); }));
+  startAuto();
+});
+</script>
+</body>
+</html>
